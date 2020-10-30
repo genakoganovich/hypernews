@@ -1,0 +1,16 @@
+type: code
+files:
+- name: main.py
+  visible: true
+  text: |-
+    hope = "I hope this is actually going to work'
+    doubt = 'Do I need to double check all lines?'
+    suggestion = "What if I write it in "double quotes"?
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/11136
+status: Solved
+feedback:
+  message: <html>Correct solution<br/><br/>Continue on <a href="https://hyperskill.org/learn/step/11136">JetBrains
+    Academy</a></html>
+  time: Sat, 24 Oct 2020 17:20:22 UTC
+record: -1
