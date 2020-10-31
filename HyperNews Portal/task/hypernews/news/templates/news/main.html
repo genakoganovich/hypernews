@@ -1,0 +1,19 @@
+{% extends "./base.html" %}
+{% block title %} Main Page {% endblock %}
+{% block content %}
+{% regroup news_items by created as news_created %}
+
+<ul>
+{% for news in news_created %}
+    <h4>{{ news.grouper }}</h4>
+
+    <ul>
+        {% for news_item in news.list %}
+            <li><a target="_blank" href="/news/{{ news_item.link }}/">
+                {{ news_item.title }}</a></li>
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

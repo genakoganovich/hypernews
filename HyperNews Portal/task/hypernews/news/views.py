@@ -14,8 +14,14 @@ class ComingSoonView(View):
         return HttpResponse("Coming soon")
 
 
+class BaseView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "news/base.html")
+
+
 class NewsView(View):
-    def get_index(self, link):
+    @staticmethod
+    def get_index(link):
         for i in range(len(news_items)):
             if news_items[i]["link"] == int(link):
                 return i
@@ -25,3 +31,22 @@ class NewsView(View):
         if self.get_index(link) is not None:
             context = {"news_dict_item": news_items[self.get_index(link)]}
             return render(request, "news/index.html", context=context)
+
+
+def get_created(e):
+    return e["created"]
+
+
+class MainView(View):
+    @staticmethod
+    def cut_created():
+        result = list()
+        for item in news_items:
+            result.append({"created": item["created"][:10], "text": item["text"],
+                           "title": item["title"], "link": item["link"]})
+        result.sort(key=get_created, reverse=True)
+        return result
+
+    def get(self, request, *args, **kwargs):
+        context = {'news_items': self.cut_created()}
+        return render(request, "news/main.html", context=context)

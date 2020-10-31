@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from news.views import ComingSoonView, NewsView
+from news.views import BaseView, NewsView, MainView, ComingSoonView
 
 urlpatterns = [
     path('', ComingSoonView.as_view()),
+    path('base/', BaseView.as_view()),
+    path('news/', MainView.as_view()),
     re_path('news/(?P<link>[^/]*)/?', NewsView.as_view()),
 ]
