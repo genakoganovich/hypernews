@@ -1132,6 +1132,108 @@ files:
     if __name__ == '__main__':
         HyperNewsTestRunner('hypernews.manage').run_tests()
   learner_created: false
+- name: hypernews/news/templates/news/main.html
+  visible: true
+  text: |
+    {% extends "./base.html" %}
+    {% block title %} Main Page {% endblock %}
+    {% block content %}
+    {% regroup news_items by created as news_created %}
+
+    <ul>
+    {% for news in news_created %}
+        <h4>{{ news.grouper }}</h4>
+
+        <ul>
+            {% for news_item in news.list %}
+                <li><a target="_blank" href="/news/{{ news_item.link }}/">
+                    {{ news_item.title }}</a></li>
+            {% endfor %}
+        </ul>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endblock %}
+    {% block link %}
+    <div>
+        <a target="_blank" href="/news/create/">/news/create/</a>
+    </div>
+    {% endblock %}
+  learner_created: true
+- name: hypernews/news/templates/news/record.html
+  visible: true
+  text: |
+    <form action="/" method="post">{% csrf_token %}
+        <p>Title:</p>
+        <input type="text" name="title">
+        <p>Text:</p>
+        <input type="text" name="text">
+        <br>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+  learner_created: true
+- name: hypernews/news/templates/news/index.html
+  visible: true
+  text: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>HyperNews Portal</title>
+    </head>
+    <body>
+        <h2>{{ news_dict_item.title }}</h2>
+        <p>{{ news_dict_item.created }}</p>
+        <p>{{ news_dict_item.text }}</p>
+        <a target="_blank" href="/news/">HyperNews</a>
+    </body>
+    </html>
+  learner_created: true
+- name: news.json
+  visible: true
+  text: '[{"created": "2020-02-09 14:15:10", "text": "Text of the news 1", "title":
+    "News 1", "link": 1}, {"created": "2020-02-10 14:15:10", "text": "Text of the
+    news 2", "title": "News 2", "link": 2}, {"created": "2020-02-09 16:15:10", "text":
+    "Text of the news 3", "title": "News 3", "link": 3}]'
+  learner_created: true
+- name: hypernews/news/templates/news/base.html
+  visible: true
+  text: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Base Page{% endblock %}</title>
+    </head>
+    <body>
+        <h2>Hyper news</h2>
+        <div>
+            {% block content %}
+            {% endblock %}
+        </div>
+        {% block link %}
+        {% endblock %}
+    </body>
+    </html>
+  learner_created: true
+- name: hypernews/news/templates/news/create.html
+  visible: true
+  text: |
+    {% extends "./base.html" %}
+    {% block title %} Create Page {% endblock %}
+    {% block content %}
+    {% include "news/record.html" %}
+    {% endblock %}
+    {% block link %}
+    <div>
+        <a target="_blank" href="/news/">/news/</a>
+    </div>
+    {% endblock %}
+  learner_created: true
+- name: hypernews/news/templates/news/search.html
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/102/stages/565/implement
 status: Unchecked
 record: -1

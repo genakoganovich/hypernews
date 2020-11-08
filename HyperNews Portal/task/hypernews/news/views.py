@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
 from django.conf import settings
-import json
+import json, random
+from datetime import datetime
 
 with open(settings.NEWS_JSON_PATH, "r") as json_file:
     news_items = json.load(json_file)
@@ -50,3 +51,21 @@ class MainView(View):
     def get(self, request, *args, **kwargs):
         context = {'news_items': self.cut_created()}
         return render(request, "news/main.html", context=context)
+
+    def post(self, request, *args, **kwargs):
+        random.seed()
+        now = datetime.now()
+        created = now.strftime("%Y-%m-%d %H:%M:%S")
+        title = request.POST.get('title')
+        text = request.POST.get('text')
+        link = random.randint(4, 1000)
+        news_items.append({"created": created, "text": text,
+                           "title": title, "link": link})
+        with open(settings.NEWS_JSON_PATH, "w") as json_f:
+            json.dump(news_items, json_f)
+        return redirect('/news/')
+
+
+class CreateView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "news/create.html")
