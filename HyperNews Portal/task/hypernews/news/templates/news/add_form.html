@@ -1,0 +1,9 @@
+<form action="/news/" method="post">{% csrf_token %}
+    <p>Title:</p>
+    <input type="text" name='title'>
+    <p>Text:</p>
+    <input type="text" name='text'>
+    <br>
+    <br>
+    <button type="submit">Submit</button>
+</form>
