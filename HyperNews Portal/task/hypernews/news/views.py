@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.views import View
 from django.conf import settings
 import json, random
@@ -12,7 +11,8 @@ with open(settings.NEWS_JSON_PATH, "r") as json_file:
 # Create your views here.
 class ComingSoonView(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse("Coming soon")
+        # return HttpResponse("Coming soon")
+        return redirect('/news/')
 
 
 class BaseView(View):
@@ -40,30 +40,44 @@ def get_created(e):
 
 class MainView(View):
     @staticmethod
-    def cut_created():
+    def cut_created(items):
         result = list()
-        for item in news_items:
+        for item in items:
             result.append({"created": item["created"][:10], "text": item["text"],
                            "title": item["title"], "link": item["link"]})
         result.sort(key=get_created, reverse=True)
         return result
 
+    def select_items_by_title(self, title):
+        result = list()
+        items = self.cut_created(news_items)
+        for item in items:
+            if title in item['title']:
+                result.append(item)
+        return result
+
     def get(self, request, *args, **kwargs):
-        context = {'news_items': self.cut_created()}
-        return render(request, "news/main.html", context=context)
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q is None or q == '':
+                context = {'news_items':  self.cut_created(news_items)}
+                return render(request, "news/main.html", context=context)
+            else:
+                context = {'news_items':  self.select_items_by_title(q)}
+                return render(request, "news/main.html", context=context)
 
     def post(self, request, *args, **kwargs):
         random.seed()
-        now = datetime.now()
-        created = now.strftime("%Y-%m-%d %H:%M:%S")
-        title = request.POST.get('title')
-        text = request.POST.get('text')
-        link = random.randint(4, 1000)
-        news_items.append({"created": created, "text": text,
+        created = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if request.method == 'POST':
+            title = request.POST.get('title')
+            text = request.POST.get('text')
+            link = random.randint(4, 1000)
+            news_items.append({"created": created, "text": text,
                            "title": title, "link": link})
-        with open(settings.NEWS_JSON_PATH, "w") as json_f:
-            json.dump(news_items, json_f)
-        return redirect('/news/')
+            with open(settings.NEWS_JSON_PATH, "w") as json_f:
+                json.dump(news_items, json_f)
+            return redirect('/news/')
 
 
 class CreateView(View):

@@ -1160,19 +1160,6 @@ files:
     </div>
     {% endblock %}
   learner_created: true
-- name: hypernews/news/templates/news/record.html
-  visible: true
-  text: |
-    <form action="/" method="post">{% csrf_token %}
-        <p>Title:</p>
-        <input type="text" name="title">
-        <p>Text:</p>
-        <input type="text" name="text">
-        <br>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
-  learner_created: true
 - name: hypernews/news/templates/news/index.html
   visible: true
   text: |
@@ -1231,9 +1218,28 @@ files:
     </div>
     {% endblock %}
   learner_created: true
-- name: hypernews/news/templates/news/search.html
+- name: hypernews/news/templates/news/search_form.html
   visible: true
   learner_created: true
+- name: hypernews/news/templates/news/add_form.html
+  visible: true
+  text: |
+    <form action="/" method="post">{% csrf_token %}
+        <p>Title:</p>
+        <input type="text" name="title">
+        <p>Text:</p>
+        <input type="text" name="text">
+        <br>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/102/stages/565/implement
-status: Unchecked
-record: -1
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #8
+
+    Wrong response for forbidden requests: Method Not Allowed
+  time: Mon, 09 Nov 2020 17:40:41 UTC
+record: 5
